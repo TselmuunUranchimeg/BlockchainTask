@@ -14,8 +14,6 @@ services:
     environment:
       POSTGRES_PASSWORD: tselmuun100
       POSTGRES_DB: BlockchainTask
-    ports:
-      - "5432:5432"
     networks:
       blockchain:
         aliases:
@@ -23,6 +21,7 @@ services:
 
   app:
     image: tselmuun69/blockchaintask
+    restart: unless-stopped
     container_name: goService
     environment:
       POSTGRESQL_HOST: postgres
