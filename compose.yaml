@@ -1,0 +1,41 @@
+version: "1.0"
+
+networks:
+  blockchain:
+    external: true
+
+services:
+  database:
+    container_name: postgresDb
+    image: postgres
+    volumes: 
+      - db-volume:/var/lib/postgresql
+      - ./create_second_db.sh:/docker-entrypoint-initdb.d/create_second_db.sh
+    environment:
+      POSTGRES_PASSWORD: tselmuun100
+      POSTGRES_DB: BlockchainTask
+    ports:
+      - "5432:5432"
+    networks:
+      blockchain:
+        aliases:
+          - postgres
+
+  app:
+    image: tselmuun69/blockchaintask
+    container_name: goService
+    environment:
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PASSWORD: tselmuun100
+      POSTGRESQL_PORT: 5432
+      POSTGRESQL_USER: postgres
+      POSTGRESQL_DBNAME: BlockchainTask
+      POSTGRESQL_CHECKUP: recentcheckblock
+    networks:
+      - blockchain
+    depends_on:
+      database:
+        condition: service_started
+
+volumes:
+  db-volume:

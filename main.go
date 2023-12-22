@@ -8,18 +8,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 
 	"blockchainTask/services"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
 	// Necessary variables
 	var (
 		host          = os.Getenv("POSTGRESQL_HOST")

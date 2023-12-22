@@ -95,11 +95,11 @@ func UpdatePreviousTransactions(db *sql.DB, latestBlockId string) error {
 	limit := num.Uint64()
 	_, err := db.Exec(`
 		UPDATE "deposit"
-		SET "is_verified" = true
+		SET "is_verified" = true, "verified_at" = $1
 		WHERE "id" IN (
-			SELECT "deposit_id" FROM "deposit_tracker" WHERE "block_number" <= $1
-		);
-	`, limit-15)
+			SELECT "deposit_id" FROM "deposit_tracker" WHERE "block_number" <= $2
+		) AND "is_verified" IS false;
+	`, time.Now(), limit-15)
 	if err != nil {
 		return err
 	}
